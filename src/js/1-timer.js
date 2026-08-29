@@ -44,18 +44,32 @@ flatpickr("#datetime-picker", options)
 
 button.addEventListener("click", hendlerClick)
 
-function hendlerClick () {
-button.disabled = true
-input.disabled = true
-const interval = setInterval(() => {
-    const diff = userSelectedDate - Date.now()
-    const time = convertMs(diff)
-days.textContent = time.days.toString().padStart(3,"0")
-hours.textContent = time.hours.toString().padStart(2,"0")
-minutes.textContent = time.hours.toString().padStart(2,"0")
-seconds.textContent = time.hours.toString().padStart(2,"0")
-},
-    1000)
+function hendlerClick() {
+  button.disabled = true;
+  input.disabled = true;
+
+  const interval = setInterval(() => {
+    const diff = userSelectedDate - Date.now();
+
+    if (diff <= 0) {
+      clearInterval(interval);
+
+      days.textContent = "00";
+      hours.textContent = "00";
+      minutes.textContent = "00";
+      seconds.textContent = "00";
+
+      input.disabled = false;
+      return;
+    }
+
+    const time = convertMs(diff);
+
+    days.textContent = time.days.toString().padStart(2, "0");
+    hours.textContent = time.hours.toString().padStart(2, "0");
+    minutes.textContent = time.minutes.toString().padStart(2, "0");
+    seconds.textContent = time.seconds.toString().padStart(2, "0");
+  }, 1000);
 }
 
 function convertMs(ms) {
